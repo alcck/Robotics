@@ -1,42 +1,39 @@
 #include <Wire.h>
+#include <MPU6050.h>
+
+MPU6050 mpu;
 
 void setup() {
   Serial.begin(115200);
-  delay(2000);
-  
-  // ESP32-C3 OLED pinleri (SDA: 5, SCL: 6)
+  // ESP32-C3 için I2C pin tanımlaması (SDA: 5, SCL: 6)
   Wire.begin(5, 6);
   Serial.println("\nI2C Tarayici Baslatiliyor...");
+  mpu.initialize();
+
+  if (mpu.testConnection()) {
+    Serial.println("MPU başarıyla bağlandı!");
+  } else {
+    Serial.println("MPU bağlanmadı!");
+    while(1);
+  }
 }
 
 void loop() {
-  byte error, address;
-  int nDevices = 0;
+  int16_t ax, ay, az;
+  int16_t gx, gy, gz;
 
-  Serial.println("Cihazlar taraniyor...");
+  // Read accelerometer & gyroscope
+  mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
 
-  for(address = 1; address < 127; address++ ) {
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
+  Serial.print("Accel (X Y Z): ");
+  Serial.print(ax); Serial.print(" ");
+  Serial.print(ay); Serial.print(" ");
+  Serial.print(az);
 
-    if (error == 0) {
-      Serial.print("I2C cihazi bulundu, adres: 0x");
-      if (address < 16) Serial.print("0");
-      Serial.print(address, HEX);
-      Serial.println(" !");
-      nDevices++;
-    }
-    else if (error == 4) {
-      Serial.print("Bilinmeyen hata, adres: 0x");
-      if (address < 16) Serial.print("0");
-      Serial.println(address, HEX);
-    }
-  }
+  Serial.print(" | Gyro (X Y Z): ");
+  Serial.print(gx); Serial.print(" ");
+  Serial.print(gy); Serial.print(" ");
+  Serial.println(gz);
 
-  if (nDevices == 0)
-    Serial.println("Hicbir I2C cihazi bulunamadi!\n");
-  else
-    Serial.println("Tarama tamamlandi.\n");
-
-  delay(5000);
+  delay(500);
 }
