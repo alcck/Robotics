@@ -1,2 +1,2 @@
-i2c_mpu6050_esp32c3_test: basic test sketch designed to interface an ESP32-C3 microcontroller with an MPU6050 6-axis accelerometer and gyroscope sensor via the I2C communication protocol, tailored specifically for reading data from an MPU6050 sensor.
-i2c_test: is a fundamental low-level diagnostic utility—typically implemented as an I2C Scanner. 
+- i2c_mpu6050_esp32c3_test: basic test sketch designed to interface an ESP32-C3 microcontroller with an MPU6050 6-axis accelerometer and gyroscope sensor via the I2C communication protocol, tailored specifically for reading data from an MPU6050 sensor.
+- i2c_test: is a fundamental low-level diagnostic utility—typically implemented as an I2C Scanner. 
